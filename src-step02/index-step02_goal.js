@@ -31,21 +31,20 @@ var toRight = true;
 
 // Step2
 // 地面要素の定義
-// 地面を増やしてみよう！
 var grounds = [
     { x: 0, y: 432, w: 200, h: 32 },
-    // { x: 200, y: 332, w: 150, h: 32 },
-    // { x: 350, y: 232, w: 250, h: 32 },
-    // { x: 600, y: 132, w: 200, h: 32 }
+    { x: 200, y: 332, w: 150, h: 32 },
+    { x: 350, y: 232, w: 250, h: 32 },
+    { x: 600, y: 132, w: 200, h: 32 }
   ];
 
 // Step2
 // 敵の情報のパラメータ宣言
-// var enemies = [
-//   { x: 528, y: 0, isJump: true, vy: 0 },
-//   { x: 750, y: 0, isJump: true, vy: 0 },
-//   { x: 300, y: 180, isJump: true, vy: 0 },
-// ];
+var enemies = [
+  { x: 528, y: 0, isJump: true, vy: 0 },
+  { x: 750, y: 0, isJump: true, vy: 0 },
+  { x: 300, y: 180, isJump: true, vy: 0 },
+];
 
 // ロード処理
 window.addEventListener("load", init);
@@ -65,38 +64,38 @@ function update() {
 
     // 敵に関する処理
     // 敵の数ぶん、ループを回して敵を動かす処理をする
-    // for (var i = 0; i < enemies.length; i++) {
-    //   var updatedEnemyX = enemies[i].x;
-    //   var updatedEnemyY = enemies[i].y;
-    //   var updatedEnemyVY = enemies[i].vy;
-    //   var updatedEnmeyIsJump = enemies[i].isJump;
+    for (var i = 0; i < enemies.length; i++) {
+      var updatedEnemyX = enemies[i].x;
+      var updatedEnemyY = enemies[i].y;
+      var updatedEnemyVY = enemies[i].vy;
+      var updatedEnmeyIsJump = enemies[i].isJump;
 
-    //   // 敵は左に固定の速度で移動
-    //   updatedEnemyX = updatedEnemyX - 1;
+      // 敵は左に固定の速度で移動
+      updatedEnemyX = updatedEnemyX - 1;
 
-    //   if (updatedEnmeyIsJump) {
-    //     const [fallingPositionY, fallingPositionVY, isJumpEnemy] = 
-    //       falling(
-    //         enemies[i].x,
-    //         enemies[i].y,
-    //         enemies[i].vy,
-    //         updatedEnemyX,
-    //         updatedEnemyY
-    //       );
-    //     updatedEnemyY = fallingPositionY;
-    //     updatedEnemyVY = fallingPositionVY;
-    //     updatedEnmeyIsJump = isJumpEnemy;
-    //   } else {
-    //     if (getPositionGroundWithCharacter(enemies[i].x, enemies[i].y, updatedEnemyX, updatedEnemyY) === null) {
-    //       updatedEnmeyIsJump = true;
-    //       updatedEnemyVY = 0;
-    //     }
-    //   }
-    //   enemies[i].x = updatedEnemyX;
-    //   enemies[i].y = updatedEnemyY;
-    //   enemies[i].vy = updatedEnemyVY;
-    //   enemies[i].isJump = updatedEnmeyIsJump;
-    // }
+      if (updatedEnmeyIsJump) {
+        const [fallingPositionY, fallingPositionVY, isJumpEnemy] = 
+          falling(
+            enemies[i].x,
+            enemies[i].y,
+            enemies[i].vy,
+            updatedEnemyX,
+            updatedEnemyY
+          );
+        updatedEnemyY = fallingPositionY;
+        updatedEnemyVY = fallingPositionVY;
+        updatedEnmeyIsJump = isJumpEnemy;
+      } else {
+        if (getPositionGroundWithCharacter(enemies[i].x, enemies[i].y, updatedEnemyX, updatedEnemyY) === null) {
+          updatedEnmeyIsJump = true;
+          updatedEnemyVY = 0;
+        }
+      }
+      enemies[i].x = updatedEnemyX;
+      enemies[i].y = updatedEnemyY;
+      enemies[i].vy = updatedEnemyVY;
+      enemies[i].isJump = updatedEnmeyIsJump;
+    }
     
     // 動かすキャラクターに関する処理
     // 更新後の座標
@@ -142,7 +141,7 @@ function displayImages() {
     ctx.drawImage(characterImage, characterImageX, characterImageY, 32, imageHeight);
 
     // Step2
-    // 地面の画像を表示　ループの部分に注目
+    // 地面の画像を表示
     var groundImage = new Image();
     groundImage.src = "../images/ground-01/base.png";
     // ループすることで、上で定義した数ぶんの地面を表示できる
@@ -152,12 +151,12 @@ function displayImages() {
 
     // Step2
     // 敵の画像を表示
-    // var enemyImage = new Image();
-    // enemyImage.src = "../images/character-02/kani_enemy.png";
-    // // ループすることで、上で定義した数ぶんの敵を表示できる
-    // for (var i = 0; i < enemies.length; i++) {
-    //   ctx.drawImage(enemyImage, enemies[i].x, enemies[i].y, 32, imageHeight);
-    // }
+    var enemyImage = new Image();
+    enemyImage.src = "../images/character-02/kani_enemy.png";
+    // ループすることで、上で定義した数ぶんの敵を表示できる
+    for (var i = 0; i < enemies.length; i++) {
+      ctx.drawImage(enemyImage, enemies[i].x, enemies[i].y, 32, imageHeight);
+    }
 }
 
 // キーボードの入力イベントをトリガーに配列のフラグ値を更新させる
@@ -211,7 +210,14 @@ function falling(x, y, vy, updatedX, updatedY) {
   // キャラクターがいる地面の座標を取得する
   const positionWithCharacter =
       getPositionGroundWithCharacter(x, y, updatedX, updatedY);
-    
+  
+  // Step1用
+  // // 着地処理　imageHeight→画像のサイズ 432→着地してほしいY座標
+    // if (updatedY + imageHeight > 432) {
+    //     updatedY = 432 - imageHeight;
+    //     isJump = false;
+    // }
+  
   // Step2
   // キャラクターのいる地面の座標を取得できたら、着地処理。
   if (positionWithCharacter !== null) {
@@ -219,7 +225,7 @@ function falling(x, y, vy, updatedX, updatedY) {
   } else {
     isJump = true; 
   }
-  return [updatedY, vy, isJump];
+return [updatedY, vy, isJump];
 
 }
 
