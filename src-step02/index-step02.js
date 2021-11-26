@@ -32,20 +32,11 @@ var toRight = true;
 // Step2
 // 地面要素の定義
 // 地面を増やしてみよう！
-var grounds = [
-    { x: 0, y: 432, w: 200, h: 32 },
-    // { x: 200, y: 332, w: 150, h: 32 },
-    // { x: 350, y: 232, w: 250, h: 32 },
-    // { x: 600, y: 132, w: 200, h: 32 }
-  ];
+var grounds = [];
 
 // Step2
 // 敵の情報のパラメータ宣言
-// var enemies = [
-//   { x: 528, y: 0, isJump: true, vy: 0 },
-//   { x: 750, y: 0, isJump: true, vy: 0 },
-//   { x: 300, y: 180, isJump: true, vy: 0 },
-// ];
+var enemies = [];
 
 // ロード処理
 window.addEventListener("load", init);
@@ -55,6 +46,22 @@ window.addEventListener("load", init);
 function init() {
     // 画面全体をクリア
     ctx.clearRect(0, 0, 840, 530);
+    characterImageX = 0;
+    characterImageY = 400;
+    characterImageVY = 0;
+    isJump = false;
+    toRight = true;
+    grounds = [
+      { x: 0, y: 432, w: 200, h: 32 },
+      // { x: 200, y: 332, w: 150, h: 32 },
+      // { x: 350, y: 232, w: 250, h: 32 },
+      // { x: 600, y: 132, w: 200, h: 32 }
+    ];
+      // enemies = [
+      //   { x: 528, y: 0, isJump: true, vy: 0 },
+      //   { x: 750, y: 0, isJump: true, vy: 0 },
+      //   { x: 300, y: 180, isJump: true, vy: 0 },
+      // ];
     update();
 }
 

@@ -1,4 +1,4 @@
-// Step1 キーボードによる操作を実装してみる。ジャンプまで
+// Step1 キーボードによる操作を実装してみる。
 
 // canvas要素の取得
 const canvas = document.getElementById("maincanvas");
@@ -120,7 +120,6 @@ function jump(updatedImageY) {
     updatedImageY = characterImageY + characterImageVY;
 
     // 落下速度を出す
-    /** 変えてみよう！ */
     characterImageVY = characterImageVY + 0.5;
 
     // 着地処理　imageHeight→画像のサイズ 432→着地してほしいY座標

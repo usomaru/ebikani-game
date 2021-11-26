@@ -1,3 +1,6 @@
+
+// Step3 当たり判定をつけてみる。ゲームオーバー。ゴールまで
+
 // canvas要素の取得
 const canvas = document.getElementById("maincanvas");
 const ctx = canvas.getContext("2d");
@@ -7,9 +10,6 @@ const speed = 2;
 
 // 画像の高さ分
 const imageHeight = 32;
-
-// 音楽の取得
-const music = new Audio();
 
 // キーボードの入力状態を記録
 var inputKeys = new Array();
@@ -26,12 +26,14 @@ var isJump = false;
 // 右向きかどうか
 var toRight = true;
 
+// Step2
 // 地面要素の定義
 var grounds = [];
 
 // 敵の情報のパラメータ宣言
 var enemies = [];
 
+// Step3
 // ゲームオーバーかどうかを判断するフラグ
 var isGameOver = false;
 
@@ -48,7 +50,6 @@ function init() {
   characterImageVY = 0;
   isJump = false;
   toRight = true;
-  // Step2で追加
   grounds = [
     { x: 0, y: 432, w: 200, h: 32 },
     { x: 200, y: 332, w: 150, h: 32 },
@@ -58,20 +59,10 @@ function init() {
   enemies = [
     { x: 528, y: 0, isJump: true, vy: 0 },
     { x: 750, y: 0, isJump: true, vy: 0 },
-    { x: 300, y: 180, isJump: true, vy: 0 }
+    { x: 300, y: 180, isJump: true, vy: 0 },
   ];
   isGameOver = false;
   update();
-}
-
-// 音楽を鳴らしたい場合に使用
-// スタートボタン押下
-function play() {
-  music.src = 'musics/sanjinooyatsu.mp3';
-  music.preload = "auto";
-  music.currentTime = 0;
-  music.play();
-  update()
 }
 
 // 画面の更新(繰り返し実行される)
@@ -79,7 +70,6 @@ function update() {
   // 画面全体をクリア
   ctx.clearRect(0, 0, 840, 530);
 
-  // Step2で追加
   // 敵に関する処理
   // 敵の数ぶん、ループを回して敵を動かす処理をする
   for (var i = 0; i < enemies.length; i++) {
@@ -126,8 +116,7 @@ function update() {
     updatedImageY = characterImageY + characterImageVY;
     characterImageVY = characterImageVY + 0.5;
     if (updatedImageY > 530) {
-      music.pause();
-      alert("Game Over");
+      alert("Game OVER");
       init();
       return;
     }
@@ -155,7 +144,7 @@ function update() {
     }
   }
 
-  // Step3で追加
+  // Step3
   // 下まで落ちたらゲームオーバーとする
   if (characterImageY > 530) {
     isGameOver = true;
@@ -167,7 +156,7 @@ function update() {
   characterImageX = updatedImageX;
   characterImageY = updatedImageY;
 
-  // Step3で追加
+  // Step3
   // この時点でまだゲームオーバーでなかったら、あたり判定を行う
   if (!isGameOver) {
 
@@ -183,6 +172,12 @@ function update() {
         32,
         imageHeight
       );
+
+      // 敵とぶつかっていた場合、ゲームオーバーとする
+      // if (isHit) {
+      //   isGameOver = true;
+      //   characterImageVY = -10;
+      // }
 
       // ジャンプして踏みつぶしたら、敵が消せる
       if (isHit) {
@@ -200,7 +195,7 @@ function update() {
     }
   }
 
-  // Step3で追加
+  // Step3
   // ゴールを作る
   if (!isGameOver) {
     var isHitGoal = isAreaOverlap(
@@ -214,8 +209,9 @@ function update() {
       imageHeight
     );
     if (isHitGoal) {
-      music.pause();
       alert("GOAL");
+      init();
+      return;
     }
   }
 
@@ -228,31 +224,31 @@ function update() {
 function displayImages() {
   // キャラクターの画像を表示
   var characterImage = new Image();
-  characterImage.src = "images/character-01/ebi-rbarse.png"
+  characterImage.src = "../images/character-01/ebi-rbarse.png"
   ctx.drawImage(characterImage, characterImageX, characterImageY, 32, imageHeight);
 
-  // Step2で追加
+  // Step2
   // 地面の画像を表示
   var groundImage = new Image();
-  groundImage.src = "images/ground-01/base.png";
+  groundImage.src = "../images/ground-01/base.png";
   // ループすることで、上で定義した数ぶんの地面を表示できる
   for (var i = 0; i < grounds.length; i++) {
     ctx.drawImage(groundImage, grounds[i].x, grounds[i].y, grounds[i].w, grounds[i].h);
   }
 
-  // Step2で追加
+  // Step2
   // 敵の画像を表示
   var enemyImage = new Image();
-  enemyImage.src = "images/character-02/kani_enemy.png";
+  enemyImage.src = "../images/character-02/kani_enemy.png";
   // ループすることで、上で定義した数ぶんの敵を表示できる
   for (var i = 0; i < enemies.length; i++) {
     ctx.drawImage(enemyImage, enemies[i].x, enemies[i].y, 32, imageHeight);
   }
 
-  // step3で追加
+  // step3
   // ゴールの画像を表示
   var goal = new Image();
-  goal.src = "images/goal/text_goal.png"
+  goal.src = "../images/goal/text_goal.png"
   ctx.drawImage(goal, 760, 100, 32, 32);
 }
 
@@ -272,7 +268,6 @@ function handleKeyup(e) {
 // キーボードによるキャラクターの操作処理
 function putKey(updatedImageX) {
 
-  // Step1で追加
   // ←
   if (inputKeys[37]) {
     toRight = false;
@@ -304,18 +299,19 @@ function falling(x, y, vy, updatedX, updatedY) {
   // 落下速度を出す
   vy = vy + 0.5;
 
-  // Step1で使用
-  // if (updatedImageY + imageHeight > 432) {
-  //   updatedImageY = 432 - imageHeight;
-  //   isJump = false;
-  // }
-
-  // Step2以降使用
   // 地面に着地していたら着地。地面に着地していなかったら、そのまま落下。
   // キャラクターがいる地面の座標を取得する
   const positionWithCharacter =
     getPositionGroundWithCharacter(x, y, updatedX, updatedY);
 
+  // Step1用
+  // // 着地処理　imageHeight→画像のサイズ 432→着地してほしいY座標
+  // if (updatedY + imageHeight > 432) {
+  //     updatedY = 432 - imageHeight;
+  //     isJump = false;
+  // }
+
+  // Step2
   // キャラクターのいる地面の座標を取得できたら、着地処理。
   if (positionWithCharacter !== null) {
     updatedY = positionWithCharacter.y - imageHeight;
