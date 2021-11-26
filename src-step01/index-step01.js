@@ -46,21 +46,21 @@ function init() {
 function update() {
     // 画面全体をクリア
     ctx.clearRect(0, 0, 840, 530);
-    
+
     // 更新後の座標
     var updatedImageX = characterImageX;
     var updatedImageY = characterImageY;
-    
+
     updatedImageX = putKey(updatedImageX);
 
     if (isJump) {
         updatedImageY = jump(updatedImageY);
     }
-    
+
     // 入力されたキーイベントの座標を反映
     characterImageX = updatedImageX;
     characterImageY = updatedImageY;
-    
+
     displayImages();
     // 再描画
     window.requestAnimationFrame(update);
@@ -77,14 +77,14 @@ function displayImages() {
 // キーボードの入力イベントをトリガーに配列のフラグ値を更新させる
 window.addEventListener("keydown", handleKeydown);
 function handleKeydown(e) {
-  e.preventDefault();
-  inputKeys[e.keyCode] = true;
+    e.preventDefault();
+    inputKeys[e.keyCode] = true;
 }
 
 window.addEventListener("keyup", handleKeyup);
 function handleKeyup(e) {
-  e.preventDefault();
-  inputKeys[e.keyCode] = false;
+    e.preventDefault();
+    inputKeys[e.keyCode] = false;
 }
 
 // 入力キーの反映 ステップ1ではここを追加してもらう

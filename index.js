@@ -26,28 +26,16 @@ var characterImageVY = 0;
 // ジャンプしたか否かのフラグ値
 var isJump = false;
 
-// 移動中の場合にカウントする
-var walkingCount = 0;
-
 // 右向きかどうか
 var toRight = true;
 
 // Step2
 // 地面要素の定義
-var grounds = [
-    { x: 0, y: 432, w: 200, h: 32 },
-    { x: 200, y: 332, w: 150, h: 32 },
-    { x: 350, y: 232, w: 250, h: 32 },
-    { x: 600, y: 132, w: 200, h: 32 }
-  ];
+var grounds = [];
 
 // Step2
 // 敵の情報のパラメータ宣言
-var enemies = [
-  { x: 528, y: 0, isJump: true, vy: 0 },
-  { x: 750, y: 0, isJump: true, vy: 0 },
-  { x: 300, y: 180, isJump: true, vy: 0 },
-];
+var enemies = [];
 
 // Step3
 // ゲームオーバーかどうかを判断するフラグ
@@ -61,7 +49,23 @@ window.addEventListener("load", init);
 function init() {
     // 画面全体をクリア
     ctx.clearRect(0, 0, 840, 530);
-    // update();
+    characterImageX = 0;
+    characterImageY = 400;
+    characterImageVY = 0;
+    isJump = false;
+    toRight = true;
+    grounds = [
+      { x: 0, y: 432, w: 200, h: 32 },
+      { x: 200, y: 332, w: 150, h: 32 },
+      { x: 350, y: 232, w: 250, h: 32 },
+      { x: 600, y: 132, w: 200, h: 32 }
+    ];
+    enemies = [
+      { x: 528, y: 0, isJump: true, vy: 0 },
+      { x: 750, y: 0, isJump: true, vy: 0 },
+      { x: 300, y: 180, isJump: true, vy: 0 }
+    ];
+    isGameOver = false;
 }
 
 // スタートボタン押下
@@ -125,9 +129,9 @@ function update() {
       characterImageVY = characterImageVY + 0.5;
       if (updatedImageY > 530) {
         music.pause();
-        alert("Game OVER");
-        isGameOver = false;
-        isJump = false;
+        alert("Game Over");
+        init();
+        return;
       }
     } else {
       updatedImageX = putKey(updatedImageX);
