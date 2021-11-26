@@ -49,30 +49,29 @@ function init() {
   isJump = false;
   toRight = true;
   // Step2で追加
-  // grounds = [
-  //   { x: 0, y: 432, w: 200, h: 32 },
-  //   { x: 200, y: 332, w: 150, h: 32 },
-  //   { x: 350, y: 232, w: 250, h: 32 },
-  //   { x: 600, y: 132, w: 200, h: 32 }
-  // ];
-  // enemies = [
-  //   { x: 528, y: 0, isJump: true, vy: 0 },
-  //   { x: 750, y: 0, isJump: true, vy: 0 },
-  //   { x: 300, y: 180, isJump: true, vy: 0 }
-  // ];
+  grounds = [
+    { x: 0, y: 432, w: 200, h: 32 },
+    { x: 200, y: 332, w: 150, h: 32 },
+    { x: 350, y: 232, w: 250, h: 32 },
+    { x: 600, y: 132, w: 200, h: 32 }
+  ];
+  enemies = [
+    { x: 528, y: 0, isJump: true, vy: 0 },
+    { x: 750, y: 0, isJump: true, vy: 0 },
+    { x: 300, y: 180, isJump: true, vy: 0 }
+  ];
   isGameOver = false;
-  update();
 }
 
 // 音楽を鳴らしたい場合に使用
 // スタートボタン押下
-// function play() {
-//   music.src = 'musics/sanjinooyatsu.mp3';
-//   music.preload = "auto";
-//   music.currentTime = 0;
-//   music.play();
-//   update()
-// }
+function play() {
+  music.src = '../musics/sanjinooyatsu.mp3';
+  music.preload = "auto";
+  music.currentTime = 0;
+  music.play();
+  update()
+}
 
 // 画面の更新(繰り返し実行される)
 function update() {
@@ -82,38 +81,38 @@ function update() {
   // Step2で追加
   // 敵に関する処理
   // 敵の数ぶん、ループを回して敵を動かす処理をする
-  // for (var i = 0; i < enemies.length; i++) {
-  //   var updatedEnemyX = enemies[i].x;
-  //   var updatedEnemyY = enemies[i].y;
-  //   var updatedEnemyVY = enemies[i].vy;
-  //   var updatedEnmeyIsJump = enemies[i].isJump;
+  for (var i = 0; i < enemies.length; i++) {
+    var updatedEnemyX = enemies[i].x;
+    var updatedEnemyY = enemies[i].y;
+    var updatedEnemyVY = enemies[i].vy;
+    var updatedEnmeyIsJump = enemies[i].isJump;
 
-  //   // 敵は左に固定の速度で移動
-  //   updatedEnemyX = updatedEnemyX - 1;
+    // 敵は左に固定の速度で移動
+    updatedEnemyX = updatedEnemyX - 1;
 
-  //   if (updatedEnmeyIsJump) {
-  //     const [fallingPositionY, fallingPositionVY, isJumpEnemy] =
-  //       falling(
-  //         enemies[i].x,
-  //         enemies[i].y,
-  //         enemies[i].vy,
-  //         updatedEnemyX,
-  //         updatedEnemyY
-  //       );
-  //     updatedEnemyY = fallingPositionY;
-  //     updatedEnemyVY = fallingPositionVY;
-  //     updatedEnmeyIsJump = isJumpEnemy;
-  //   } else {
-  //     if (getPositionGroundWithCharacter(enemies[i].x, enemies[i].y, updatedEnemyX, updatedEnemyY) === null) {
-  //       updatedEnmeyIsJump = true;
-  //       updatedEnemyVY = 0;
-  //     }
-  //   }
-  //   enemies[i].x = updatedEnemyX;
-  //   enemies[i].y = updatedEnemyY;
-  //   enemies[i].vy = updatedEnemyVY;
-  //   enemies[i].isJump = updatedEnmeyIsJump;
-  // }
+    if (updatedEnmeyIsJump) {
+      const [fallingPositionY, fallingPositionVY, isJumpEnemy] =
+        falling(
+          enemies[i].x,
+          enemies[i].y,
+          enemies[i].vy,
+          updatedEnemyX,
+          updatedEnemyY
+        );
+      updatedEnemyY = fallingPositionY;
+      updatedEnemyVY = fallingPositionVY;
+      updatedEnmeyIsJump = isJumpEnemy;
+    } else {
+      if (getPositionGroundWithCharacter(enemies[i].x, enemies[i].y, updatedEnemyX, updatedEnemyY) === null) {
+        updatedEnmeyIsJump = true;
+        updatedEnemyVY = 0;
+      }
+    }
+    enemies[i].x = updatedEnemyX;
+    enemies[i].y = updatedEnemyY;
+    enemies[i].vy = updatedEnemyVY;
+    enemies[i].isJump = updatedEnmeyIsJump;
+  }
 
   // 動かすキャラクターに関する処理
   // 更新後の座標
@@ -121,19 +120,19 @@ function update() {
   var updatedImageY = characterImageY;
 
   // Step3追加　ゲームオーバー判定
-  // if (isGameOver) {
-  //   // ゲームオーバーしたときの挙動
-  //   updatedImageY = characterImageY + characterImageVY;
-  //   characterImageVY = characterImageVY + 0.5;
-  //   if (updatedImageY > 530) {
-  //     music.pause();
-  //     alert("Game Over");
-  //     init();
-  //     return;
-  //   }
-  // } else {
-  updatedImageX = putKey(updatedImageX);
-  // }
+  if (isGameOver) {
+    // ゲームオーバーしたときの挙動
+    updatedImageY = characterImageY + characterImageVY;
+    characterImageVY = characterImageVY + 0.5;
+    if (updatedImageY > 530) {
+      music.pause();
+      alert("Game Over");
+      init();
+      return;
+    }
+  } else {
+    updatedImageX = putKey(updatedImageX);
+  }
 
   if (isJump) {
     const [fallingPositionY, fallingPositionVY, isJumpChara] =
@@ -149,20 +148,19 @@ function update() {
     isJump = isJumpChara;
   } else {
     // ブロックの上にいなければジャンプ中の扱いとして初期速度0で落下するようにする
-    // Step2で追加する
-    // if (getPositionGroundWithCharacter(characterImageX, characterImageY, updatedImageX, updatedImageY) === null) {
-    //   isJump = true;
-    //   characterImageVY = 0;
-    // }
+    if (getPositionGroundWithCharacter(characterImageX, characterImageY, updatedImageX, updatedImageY) === null) {
+      isJump = true;
+      characterImageVY = 0;
+    }
   }
 
   // Step3で追加
   // 下まで落ちたらゲームオーバーとする
-  // if (characterImageY > 530) {
-  //   isGameOver = true;
-  //   updatedImageY = 530;
-  //   characterImageVY = -20;
-  // }
+  if (characterImageY > 530) {
+    isGameOver = true;
+    updatedImageY = 530;
+    characterImageVY = -20;
+  }
 
   // 入力されたキーイベントの座標を反映
   characterImageX = updatedImageX;
@@ -170,57 +168,57 @@ function update() {
 
   // Step3で追加
   // この時点でまだゲームオーバーでなかったら、あたり判定を行う
-  // if (!isGameOver) {
+  if (!isGameOver) {
 
-  //   // 敵情報ごとに当たり判定を行う必要があるので、ループ
-  //   for (var i = 0; i < enemies.length; i++) {
-  //     var isHit = isAreaOverlap(
-  //       updatedImageX,
-  //       updatedImageY,
-  //       32,
-  //       imageHeight,
-  //       enemies[i].x,
-  //       enemies[i].y,
-  //       32,
-  //       imageHeight
-  //     );
+    // 敵情報ごとに当たり判定を行う必要があるので、ループ
+    for (var i = 0; i < enemies.length; i++) {
+      var isHit = isAreaOverlap(
+        updatedImageX,
+        updatedImageY,
+        32,
+        imageHeight,
+        enemies[i].x,
+        enemies[i].y,
+        32,
+        imageHeight
+      );
 
-  //     // ジャンプして踏みつぶしたら、敵が消せる
-  //     if (isHit) {
-  //       if (isJump && characterImageVY > 0) {
-  //         // ジャンプしていて、落下している状態で敵にぶつかった場合には
-  //         // 敵を消し去る(見えない位置に移動させる)とともに、上向きにジャンプさせる
-  //         characterImageVY = -7;
-  //         enemies[i].y = 530;
-  //       } else {
-  //         // ぶつかっていた場合にはゲームオーバーとし、上方向の初速度を与える
-  //         isGameOver = true;
-  //         characterImageVY = -10;
-  //       }
-  //     }
-  //   }
-  // }
+      // ジャンプして踏みつぶしたら、敵が消せる
+      if (isHit) {
+        if (isJump && characterImageVY > 0) {
+          // ジャンプしていて、落下している状態で敵にぶつかった場合には
+          // 敵を消し去る(見えない位置に移動させる)とともに、上向きにジャンプさせる
+          characterImageVY = -7;
+          enemies[i].y = 530;
+        } else {
+          // ぶつかっていた場合にはゲームオーバーとし、上方向の初速度を与える
+          isGameOver = true;
+          characterImageVY = -10;
+        }
+      }
+    }
+  }
 
   // Step3で追加
   // ゴールを作る
-  // if (!isGameOver) {
-  //   var isHitGoal = isAreaOverlap(
-  //     updatedImageX,
-  //     updatedImageY,
-  //     32,
-  //     imageHeight,
-  //     760,
-  //     100,
-  //     32,
-  //     imageHeight
-  //   );
-  //   if (isHitGoal) {
-  //     music.pause();
-  //     alert("GOAL");
-  //     init();
-  //     return;
-  //   }
-  // }
+  if (!isGameOver) {
+    var isHitGoal = isAreaOverlap(
+      updatedImageX,
+      updatedImageY,
+      32,
+      imageHeight,
+      760,
+      100,
+      32,
+      imageHeight
+    );
+    if (isHitGoal) {
+      music.pause();
+      alert("GOAL");
+      init();
+      return;
+    }
+  }
 
   displayImages();
   // 再描画
@@ -231,32 +229,32 @@ function update() {
 function displayImages() {
   // キャラクターの画像を表示
   var characterImage = new Image();
-  characterImage.src = "images/character-01/ebi-rbarse.png"
+  characterImage.src = "../images/character-01/ebi-rbarse.png"
   ctx.drawImage(characterImage, characterImageX, characterImageY, 32, imageHeight);
 
   // Step2で追加
   // 地面の画像を表示
-  // var groundImage = new Image();
-  // groundImage.src = "images/ground-01/base.png";
-  // // ループすることで、上で定義した数ぶんの地面を表示できる
-  // for (var i = 0; i < grounds.length; i++) {
-  //   ctx.drawImage(groundImage, grounds[i].x, grounds[i].y, grounds[i].w, grounds[i].h);
-  // }
+  var groundImage = new Image();
+  groundImage.src = "../images/ground-01/base.png";
+  // ループすることで、上で定義した数ぶんの地面を表示できる
+  for (var i = 0; i < grounds.length; i++) {
+    ctx.drawImage(groundImage, grounds[i].x, grounds[i].y, grounds[i].w, grounds[i].h);
+  }
 
   // Step2で追加
   // 敵の画像を表示
-  // var enemyImage = new Image();
-  // enemyImage.src = "images/character-02/kani_enemy.png";
-  // // ループすることで、上で定義した数ぶんの敵を表示できる
-  // for (var i = 0; i < enemies.length; i++) {
-  //   ctx.drawImage(enemyImage, enemies[i].x, enemies[i].y, 32, imageHeight);
-  // }
+  var enemyImage = new Image();
+  enemyImage.src = "../images/character-02/kani_enemy.png";
+  // ループすることで、上で定義した数ぶんの敵を表示できる
+  for (var i = 0; i < enemies.length; i++) {
+    ctx.drawImage(enemyImage, enemies[i].x, enemies[i].y, 32, imageHeight);
+  }
 
   // step3で追加
   // ゴールの画像を表示
-  // var goal = new Image();
-  // goal.src = "images/goal/text_goal.png"
-  // ctx.drawImage(goal, 760, 100, 32, 32);
+  var goal = new Image();
+  goal.src = "../images/goal/text_goal.png"
+  ctx.drawImage(goal, 760, 100, 32, 32);
 }
 
 // キーボードの入力イベントをトリガーに配列のフラグ値を更新させる
@@ -277,22 +275,22 @@ function putKey(updatedImageX) {
 
   // Step1で追加
   // ←
-  // if (inputKeys[37]) {
-  //   toRight = false;
-  //   updatedImageX = characterImageX - speed;
-  // }
+  if (inputKeys[37]) {
+    toRight = false;
+    updatedImageX = characterImageX - speed;
+  }
 
-  // // →
-  // if (inputKeys[39]) {
-  //   toRight = true;
-  //   updatedImageX = characterImageX + speed;
-  // }
+  // →
+  if (inputKeys[39]) {
+    toRight = true;
+    updatedImageX = characterImageX + speed;
+  }
 
-  // // ↑ (ジャンプ)
-  // if ((inputKeys[38]) && !isJump) {
-  //   characterImageVY = -10;
-  //   isJump = true;
-  // }
+  // ↑ (ジャンプ)
+  if ((inputKeys[38]) && !isJump) {
+    characterImageVY = -10;
+    isJump = true;
+  }
 
   // 入力されたキーイベントの座標を返却
   return updatedImageX
@@ -300,9 +298,7 @@ function putKey(updatedImageX) {
 
 // 落下処理
 function falling(x, y, vy, updatedX, updatedY) {
-  // Step2で追加する
-  // var isJump = false;
-
+  var isJump = false;
   // 速度分追加
   updatedY = y + vy;
 
@@ -310,23 +306,23 @@ function falling(x, y, vy, updatedX, updatedY) {
   vy = vy + 0.5;
 
   // Step1で使用
-  if (updatedY + imageHeight > 432) {
-    updatedY = 432 - imageHeight;
-    isJump = false;
-  }
+  // if (updatedImageY + imageHeight > 432) {
+  //   updatedImageY = 432 - imageHeight;
+  //   isJump = false;
+  // }
 
   // Step2以降使用
   // 地面に着地していたら着地。地面に着地していなかったら、そのまま落下。
   // キャラクターがいる地面の座標を取得する
-  // const positionWithCharacter =
-  //   getPositionGroundWithCharacter(x, y, updatedX, updatedY);
+  const positionWithCharacter =
+    getPositionGroundWithCharacter(x, y, updatedX, updatedY);
 
-  // // キャラクターのいる地面の座標を取得できたら、着地処理。
-  // if (positionWithCharacter !== null) {
-  //   updatedY = positionWithCharacter.y - imageHeight;
-  // } else {
-  //   isJump = true;
-  // }
+  // キャラクターのいる地面の座標を取得できたら、着地処理。
+  if (positionWithCharacter !== null) {
+    updatedY = positionWithCharacter.y - imageHeight;
+  } else {
+    isJump = true;
+  }
   return [updatedY, vy, isJump];
 
 }
