@@ -7,4 +7,5 @@ body {
     background: #eee;
     display: block;
     margin: 0 auto;
+    background-image: url(images/background/background_base.png);
   }

@@ -62,6 +62,10 @@ function init() {
     { x: 300, y: 180, isJump: true, vy: 0 },
   ];
   isGameOver = false;
+  // 2回目以降何もキーを押してなくても動いてしまう対応
+  inputKeys[37] = false; 
+  inputKeys[38] = false;
+  inputKeys[39] = false;
   update();
 }
 
